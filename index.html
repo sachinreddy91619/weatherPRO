@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        nav {
+            width: 100%;
+            height: 50px;
+            background-color: rgb(74, 17, 172);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .se {
+            margin-top: 20px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .se>input {
+            height: 30px;
+            width: 250px;
+        }
+
+        button {
+            background-color: aquamarine;
+            height: 35px;
+        }
+
+        .con {
+            margin-top: 50px;
+            width: 80%;
+            height: 250px;
+            background-color: pink;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <h4>Weather</h4>
+    </nav>
+
+    <div class="se">
+        <input type="text" placeholder="City name">
+        <button onclick="fun(this)">Search</button>
+    </div>
+
+    <div class="con">
+        <h3>Avg-Temp:</h3>
+        <h3>Max-Temp:</h3>
+        <h3>Min-Temp:</h3>
+        <h3>Humidity:</h3>
+    </div>
+
+    <script>
+        let fun = (e) => {
+            let ip = document.getElementsByTagName("input")[0];
+
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${ip.value}&units=metric&appid=eedd52cc943dd9174f2c65178d154bdd`)
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error('City not found');
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    console.log(data);
+
+                    document.getElementsByTagName("h3")[0].innerHTML = `Avg-Temp: ${data.main.temp} °C`;
+                    document.getElementsByTagName("h3")[1].innerHTML = `Max-Temp: ${data.main.temp_max} °C`;
+                    document.getElementsByTagName("h3")[2].innerHTML = `Min-Temp: ${data.main.temp_min} °C`;
+                    document.getElementsByTagName("h3")[3].innerHTML = `Humidity: ${data.main.humidity}%`;
+                })
+                .catch((error) => {
+                    alert(error.message);
+                });
+
+            ip.value = "";
+        }
+    </script>
+</body>
+
+</html>
